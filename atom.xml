@@ -1,27 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://localhost:4000</id>
+    <id>https://github.com/yesky93</id>
     <title>Gridea</title>
-    <updated>2020-02-16T15:25:48.020Z</updated>
+    <updated>2020-02-25T09:07:13.442Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://localhost:4000"/>
-    <link rel="self" href="http://localhost:4000/atom.xml"/>
+    <link rel="alternate" href="https://github.com/yesky93"/>
+    <link rel="self" href="https://github.com/yesky93/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>http://localhost:4000/images/avatar.png</logo>
-    <icon>http://localhost:4000/favicon.ico</icon>
+    <logo>https://github.com/yesky93/images/avatar.png</logo>
+    <icon>https://github.com/yesky93/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
     <entry>
-        <title type="html"><![CDATA[基于OpenResty的CoinGate 搭建记录 (Day 001)]]></title>
-        <id>http://localhost:4000/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001</id>
-        <link href="http://localhost:4000/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001">
+        <title type="html"><![CDATA[基于OpenResty的FluxGate 搭建记录 (Day 002)]]></title>
+        <id>https://github.com/yesky93/post/ji-yu-openresty-de-fluxgate-da-jian-ji-lu-day-002</id>
+        <link href="https://github.com/yesky93/post/ji-yu-openresty-de-fluxgate-da-jian-ji-lu-day-002">
+        </link>
+        <updated>2020-02-23T01:39:51.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="当前的问题">当前的问题</h1>
+<h3 id="非并发">非并发</h3>
+<ul>
+<li>使用resty.http发送的多个请求没有并发执行</li>
+</ul>
+<h1 id="解决方案">解决方案</h1>
+<h3 id="使用capture_multi">使用capture_multi</h3>
+<ul>
+<li>会有占用内存大的问题?</li>
+</ul>
+<h3 id="使用light-thread">使用light thread</h3>
+<h3 id="使用cosocket">使用cosocket</h3>
+<h1 id="尝试使用capture_multi来解决">尝试使用capture_multi来解决</h1>
+<pre><code>local binance_ticker_api = '/access_huobi'
+local okex_ticker_api = '/access_huobi'
+local huobi_ticker_api = '/access_huobi'
+
+local list = {}
+local apis = {binance_ticker_api, okex_ticker_api, huobi_ticker_api}
+for idx,api in pairs(apis) do
+    ngx.log(ngx.ERR, 'api', idx,' ', api)
+    local tmp = {api,{method=ngx.HTTP_GET}};
+    table.insert(list, tmp);
+end
+
+local response = {ngx.location.capture_multi(list)}
+
+local data = {};
+for num,resp in pairs(response) do
+    ngx.log(ngx.ERR, 'resp', num,' ', resp['uri'])
+    ngx.log(ngx.ERR, 'resp', resp[&quot;status&quot;])
+    --ngx.log(ngx.ERR, 'resp', cjson.encode(resp['header']))
+    ngx.log(ngx.ERR, 'resp', resp[&quot;body&quot;])
+    resp = cjson.decode(resp[&quot;body&quot;]);
+    -- data[resp[&quot;uri&quot;]] = resp;
+end;
+</code></pre>
+<h3 id="遇到的问题">遇到的问题</h3>
+<ul>
+<li>请求的内容是gzip压缩的 不能直接处理
+<ul>
+<li>解决: 在配置文件中的<code>location</code>中写入<code>proxy_set_header Accept-Encoding &quot;&quot;;</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用协程-light-thread">使用协程 light thread</h1>
+<h3 id="遇到的问题-2">遇到的问题</h3>
+<ul>
+<li><code>socket busy connecting</code>
+<ul>
+<li>这是因为每个协程都用了一个<code>httpc</code></li>
+<li>把<code>local httpc = http.new()</code>代码放入每个请求方法内部</li>
+<li>每个协程使用自己的<code>httpc</code>来请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="测试">测试</h3>
+<ul>
+<li>非协程花费时间 <code>0.95999979972839</code></li>
+<li>协程花费时间 0.28399991989136</li>
+<li></li>
+</ul>
+<h1 id="cosocket">cosocket</h1>
+<pre><code>cosocket = coroutine + socket
+</code></pre>
+<h6 id="参考">[参考]</h6>
+<ul>
+<li><a href="https://www.cnblogs.com/babycomeon/p/11109517.html">use capture_multi &amp; light thread</a></li>
+<li><a href="https://github.com/ledgetech/lua-resty-http/issues/49">resty.http是否可以做到非阻塞</a></li>
+<li><a href="https://github.com/openresty/lua-nginx-module#ngxthreadspawn">ngx.thread.spawn</a></li>
+<li><a href="https://segmentfault.com/a/1190000007957976?_ea=1509465">配置openresty使用lua并发请求API</a></li>
+<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/ngx_lua/whats_cosocket.html">cosocket</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[OpenResty非阻塞探究]]></title>
+        <id>https://github.com/yesky93/post/openresty-fei-zu-sai-tan-jiu</id>
+        <link href="https://github.com/yesky93/post/openresty-fei-zu-sai-tan-jiu">
+        </link>
+        <updated>2020-02-17T22:21:45.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>OpenResty的协程是基于nginx的master-worker模式</li>
+<li>Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程</li>
+<li>ngx_lua会自动把IO操作委托给Nginx事件处理机制</li>
+<li>OpenResty的非阻塞是利用worker上的协程不阻塞进程,和nodejs的代码级的非阻塞有区别</li>
+</ul>
+<pre><code>Nginx采用的是master-worker模型，也就是一个master进程管理多个worker进程，基本的时间处理都放在worker进程中，master进程负责全局初始化以及对worker进行的管理
+
+OpenResty中，每个worker进程使用一个LuaVM，当请求被分配到worker时，将在这个LuaVM中创建一个coroutine协程，协程之间数据隔离，每个协程都具有独立的全局变量
+</code></pre>
+<pre><code>ngx_lua是将Lua嵌入Nginx，让Nginx执行Lua脚本，并且高并发、非阻塞的处理各种请求。Lua内建协程，可以很好的将异步回调转换成顺序调用的形式。ngx_lua在Lua中进行的IO操作都会委托给Nginx的事件模型，从而实现非阻塞调用。开发者可以采用串行的方式编写程序，ngx_lua会自动的在进行阻塞的IO操作中终端，保存上下文，然后将IO操作委托给Nginx事件处理机制，在IO操作完成后，ngx_lua会恢复上下文，程序继续执行，这些操作都是对用户程序透明的
+</code></pre>
+<pre><code>ngx_lua模块的原理
+
+- 每个工作进程worker创建一个Lua虚拟机（LuaVM）,工作进程worker内部协议共享VM。
+-每个Nginx I/O原语封装后注入Lua虚拟机，并允许Lua代码直接访问。
+- 每个外部请求都由一个Lua协程处理，协程之间数据隔离。
+- Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程。
+- I/O等异步操作完成时，还原相关协程相关协议的上下文，并继续运行。
+</code></pre>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/48229675">Openresty踩坑日志 - 命令行导致阻塞</a></li>
+<li><a href="https://www.jianshu.com/p/cb1f67c4a97c">OpenResty工作原理</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[基于OpenResty的FluxGate 搭建记录 (Day 001)]]></title>
+        <id>https://github.com/yesky93/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001</id>
+        <link href="https://github.com/yesky93/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001">
         </link>
         <updated>2020-02-16T12:50:33.000Z</updated>
         <content type="html"><![CDATA[<h1 id="使用restyhttp进行http请求">使用resty.http进行http请求</h1>
-<h3 id="访问https协议遇到的问题">访问https协议遇到的问题</h3>
+<h5 id="访问https协议遇到的问题">访问https协议遇到的问题</h5>
 <ul>
 <li>通过 <code>{ ssl_verify = false }</code>来解决</li>
 </ul>
-<h3 id="通过网址发送请求需要配置resolver">通过网址发送请求需要配置resolver</h3>
+<h5 id="通过网址发送请求需要配置resolver">通过网址发送请求需要配置resolver</h5>
 <pre><code>当我们需要在某一个请求内部发起这样一个 http 查询，采用 proxy_pass 是不行的（依赖 resolver 的 DNS，如果 DNS 有变化，必须要重新加载配置），并且由于 proxy_pass 不能直接设置 keepalive，导致每次请求都是短链接，性能损失严重。
 </code></pre>
 <pre><code>使用 resty.http，目前这个库只支持 ip ：port 的方式定义 url，其内部实现并没有支持 domain 解析。
@@ -30,18 +143,23 @@ resty.http 是支持 set_keepalive 完成长连接，这样我们只需要让他
 <ul>
 <li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/dns/use_dynamic_dns.html">参考</a></li>
 </ul>
-<h3 id="request-assign-的问题">request assign 的问题</h3>
+<h5 id="request-assign-的问题">request assign 的问题</h5>
 <pre><code>resolver 8.8.8.8 ipv6=off;
 </code></pre>
 <h1 id="记录日志">记录日志</h1>
 <pre><code>ngx.log(ngx.ERR, 'huobi:status:', res.status)
 </code></pre>
+<h1 id="了解grpc">了解gRPC</h1>
+<ul>
+<li><a href="https://medium.com/@jeffzzq/calling-a-grpc-service-from-nginx-27d23198563e">Call gRPC from lua</a></li>
+<li><a href="https://blog.csdn.net/sunt2018/article/details/90176015">python gRPC</a></li>
+</ul>
 ]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[OpenResty学习笔记]]></title>
-        <id>http://localhost:4000/post/openresty-xue-xi-bi-ji</id>
-        <link href="http://localhost:4000/post/openresty-xue-xi-bi-ji">
+        <id>https://github.com/yesky93/post/openresty-xue-xi-bi-ji</id>
+        <link href="https://github.com/yesky93/post/openresty-xue-xi-bi-ji">
         </link>
         <updated>2020-02-15T09:03:19.000Z</updated>
         <content type="html"><![CDATA[<pre><code> /usr/local/openresty/nginx/sbin/nginx  -p openresty-test
@@ -68,8 +186,8 @@ resty.http 是支持 set_keepalive 完成长连接，这样我们只需要让他
     </entry>
     <entry>
         <title type="html"><![CDATA[在Ubuntu安装Ta-Lib以及使用]]></title>
-        <id>http://localhost:4000/post/zai-ubuntu-an-zhuang-ta-lib</id>
-        <link href="http://localhost:4000/post/zai-ubuntu-an-zhuang-ta-lib">
+        <id>https://github.com/yesky93/post/zai-ubuntu-an-zhuang-ta-lib</id>
+        <link href="https://github.com/yesky93/post/zai-ubuntu-an-zhuang-ta-lib">
         </link>
         <updated>2020-02-06T03:21:52.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -95,8 +213,8 @@ sudo make install
     </entry>
     <entry>
         <title type="html"><![CDATA[统计学视角下的金融高频数据挖掘理论与方法研究]]></title>
-        <id>http://localhost:4000/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu</id>
-        <link href="http://localhost:4000/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu">
+        <id>https://github.com/yesky93/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu</id>
+        <link href="https://github.com/yesky93/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu">
         </link>
         <updated>2020-02-06T02:22:42.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -107,8 +225,8 @@ sudo make install
     </entry>
     <entry>
         <title type="html"><![CDATA[Flutter Chart LIbrary]]></title>
-        <id>http://localhost:4000/post/flutter-chart-library</id>
-        <link href="http://localhost:4000/post/flutter-chart-library">
+        <id>https://github.com/yesky93/post/flutter-chart-library</id>
+        <link href="https://github.com/yesky93/post/flutter-chart-library">
         </link>
         <updated>2020-02-02T01:14:24.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -120,8 +238,8 @@ sudo make install
     </entry>
     <entry>
         <title type="html"><![CDATA[OpenResty学习]]></title>
-        <id>http://localhost:4000/post/openresty-xue-xi</id>
-        <link href="http://localhost:4000/post/openresty-xue-xi">
+        <id>https://github.com/yesky93/post/openresty-xue-xi</id>
+        <link href="https://github.com/yesky93/post/openresty-xue-xi">
         </link>
         <updated>2020-01-30T08:08:57.000Z</updated>
         <content type="html"><![CDATA[<ul>
@@ -132,8 +250,8 @@ sudo make install
     </entry>
     <entry>
         <title type="html"><![CDATA[VSCode远程模式]]></title>
-        <id>http://localhost:4000/post/vscode-yuan-cheng-mo-shi</id>
-        <link href="http://localhost:4000/post/vscode-yuan-cheng-mo-shi">
+        <id>https://github.com/yesky93/post/vscode-yuan-cheng-mo-shi</id>
+        <link href="https://github.com/yesky93/post/vscode-yuan-cheng-mo-shi">
         </link>
         <updated>2019-12-30T03:26:12.000Z</updated>
         <content type="html"><![CDATA[<h1 id="文档">文档</h1>
@@ -144,83 +262,11 @@ sudo make install
     </entry>
     <entry>
         <title type="html"><![CDATA[创建GUI的新方式 - 飞冰]]></title>
-        <id>http://localhost:4000/post/chuang-jian-gui-de-xin-fang-shi-fei-bing</id>
-        <link href="http://localhost:4000/post/chuang-jian-gui-de-xin-fang-shi-fei-bing">
+        <id>https://github.com/yesky93/post/chuang-jian-gui-de-xin-fang-shi-fei-bing</id>
+        <link href="https://github.com/yesky93/post/chuang-jian-gui-de-xin-fang-shi-fei-bing">
         </link>
         <updated>2019-12-07T21:10:16.000Z</updated>
         <content type="html"><![CDATA[<p>https://ice.work/docs/guide/about</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[移动端跨平台Canvas解决方案 ]]></title>
-        <id>http://localhost:4000/post/yi-dong-duan-kua-ping-tai-canvas-jie-jue-fang-an</id>
-        <link href="http://localhost:4000/post/yi-dong-duan-kua-ping-tai-canvas-jie-jue-fang-an">
-        </link>
-        <updated>2019-12-07T21:00:36.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="gcanvas">GCanvas</h3>
-<ul>
-<li>https://github.com/alibaba/GCanvas</li>
-</ul>
-<h3 id="股票图形库">股票图形库</h3>
-<ul>
-<li>https://blog.csdn.net/seerline/article/details/80075359</li>
-<li>https://github.com/seerline/clchart</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[量化开发 2019-10-12]]></title>
-        <id>http://localhost:4000/post/liang-hua-kai-fa-2019-10-12</id>
-        <link href="http://localhost:4000/post/liang-hua-kai-fa-2019-10-12">
-        </link>
-        <updated>2019-10-12T07:23:11.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="任务概述">任务概述</h1>
-<ul>
-<li>exnet-fmz 控制执行</li>
-<li>策略存放在FMZ上，在使用时，一个机器人搭载一个策略</li>
-<li>exnet-trade-hub 负责转账</li>
-</ul>
-<h1 id="策略思想">策略思想</h1>
-<h3 id="背景">背景</h3>
-<ul>
-<li>整体数字货币市场存在相当大的不确定性</li>
-<li>处于熊市，其原因为整体的经济环境和落地不及预期</li>
-<li>区块链技术还是在不断的发展，长期来看有成为价值互联网的趋势</li>
-<li>世界的地缘经济对抗造成对比特币的需求增长</li>
-<li>大部分山寨币看不到希望，有归零的可能性</li>
-<li>整个市场的头部还是交易所</li>
-</ul>
-<h3 id="描述">描述</h3>
-<h6 id="策略一-跳跃">策略一 &lt;跳跃&gt;</h6>
-<ul>
-<li>抓住日内趋势</li>
-<li>观察每一个目标,给予评分</li>
-<li>不断形成序列</li>
-<li>每一次买入设置不超过x%的期望值</li>
-</ul>
-<h6 id="策略二-风">策略二 &lt;风&gt;</h6>
-<ul>
-<li>抓住上涨趋势</li>
-<li>在可控范围内 买入卖出增加头寸</li>
-</ul>
-<h3 id="特点">特点</h3>
-<ul>
-<li>以天为单位</li>
-<li>较高频次的交易</li>
-<li>跨交易所</li>
-</ul>
-<h3 id="评估系统">评估系统</h3>
-<ul>
-<li>K线形态</li>
-<li>交易量</li>
-</ul>
-<h1 id="notes">Notes:</h1>
-<ul>
-<li>量化只是工具，是策略的执行体</li>
-<li>策略本身就是为了控制一进一出, 即买入和卖出</li>
-<li>回测是度量策略好坏的一种概率性方法，实盘的情况可能不尽相同</li>
-<li>识别趋势是整个策略的背景</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

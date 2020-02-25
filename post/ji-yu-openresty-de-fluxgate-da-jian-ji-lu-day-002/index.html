@@ -1,0 +1,190 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>基于OpenResty的FluxGate 搭建记录 (Day 002) | Gridea</title>
+<link rel="shortcut icon" href="https://github.com/yesky93/favicon.ico?v=1582621622797">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yesky93/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://github.com/yesky93">
+  <img class="avatar" src="https://github.com/yesky93/images/avatar.png?v=1582621622797" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              基于OpenResty的FluxGate 搭建记录 (Day 002)
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2020-02-23 ·
+              </time>
+              
+            </div>
+            
+            <div class="post-content">
+              <h1 id="当前的问题">当前的问题</h1>
+<h3 id="非并发">非并发</h3>
+<ul>
+<li>使用resty.http发送的多个请求没有并发执行</li>
+</ul>
+<h1 id="解决方案">解决方案</h1>
+<h3 id="使用capture_multi">使用capture_multi</h3>
+<ul>
+<li>会有占用内存大的问题?</li>
+</ul>
+<h3 id="使用light-thread">使用light thread</h3>
+<h3 id="使用cosocket">使用cosocket</h3>
+<h1 id="尝试使用capture_multi来解决">尝试使用capture_multi来解决</h1>
+<pre><code>local binance_ticker_api = '/access_huobi'
+local okex_ticker_api = '/access_huobi'
+local huobi_ticker_api = '/access_huobi'
+
+local list = {}
+local apis = {binance_ticker_api, okex_ticker_api, huobi_ticker_api}
+for idx,api in pairs(apis) do
+    ngx.log(ngx.ERR, 'api', idx,' ', api)
+    local tmp = {api,{method=ngx.HTTP_GET}};
+    table.insert(list, tmp);
+end
+
+local response = {ngx.location.capture_multi(list)}
+
+local data = {};
+for num,resp in pairs(response) do
+    ngx.log(ngx.ERR, 'resp', num,' ', resp['uri'])
+    ngx.log(ngx.ERR, 'resp', resp[&quot;status&quot;])
+    --ngx.log(ngx.ERR, 'resp', cjson.encode(resp['header']))
+    ngx.log(ngx.ERR, 'resp', resp[&quot;body&quot;])
+    resp = cjson.decode(resp[&quot;body&quot;]);
+    -- data[resp[&quot;uri&quot;]] = resp;
+end;
+</code></pre>
+<h3 id="遇到的问题">遇到的问题</h3>
+<ul>
+<li>请求的内容是gzip压缩的 不能直接处理
+<ul>
+<li>解决: 在配置文件中的<code>location</code>中写入<code>proxy_set_header Accept-Encoding &quot;&quot;;</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用协程-light-thread">使用协程 light thread</h1>
+<h3 id="遇到的问题-2">遇到的问题</h3>
+<ul>
+<li><code>socket busy connecting</code>
+<ul>
+<li>这是因为每个协程都用了一个<code>httpc</code></li>
+<li>把<code>local httpc = http.new()</code>代码放入每个请求方法内部</li>
+<li>每个协程使用自己的<code>httpc</code>来请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="测试">测试</h3>
+<ul>
+<li>非协程花费时间 <code>0.95999979972839</code></li>
+<li>协程花费时间 0.28399991989136</li>
+<li></li>
+</ul>
+<h1 id="cosocket">cosocket</h1>
+<pre><code>cosocket = coroutine + socket
+</code></pre>
+<h6 id="参考">[参考]</h6>
+<ul>
+<li><a href="https://www.cnblogs.com/babycomeon/p/11109517.html">use capture_multi &amp; light thread</a></li>
+<li><a href="https://github.com/ledgetech/lua-resty-http/issues/49">resty.http是否可以做到非阻塞</a></li>
+<li><a href="https://github.com/openresty/lua-nginx-module#ngxthreadspawn">ngx.thread.spawn</a></li>
+<li><a href="https://segmentfault.com/a/1190000007957976?_ea=1509465">配置openresty使用lua并发请求API</a></li>
+<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/ngx_lua/whats_cosocket.html">cosocket</a></li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://github.com/yesky93/post/openresty-fei-zu-sai-tan-jiu">
+              <h3 class="post-title">
+                OpenResty非阻塞探究
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="https://github.com/yesky93/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

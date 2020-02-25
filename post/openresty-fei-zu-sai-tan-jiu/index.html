@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Flex布局总结 | Gridea</title>
+<title>OpenResty非阻塞探究 | Gridea</title>
 <link rel="shortcut icon" href="https://github.com/yesky93/favicon.ico?v=1582621622797">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -74,51 +74,39 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Flex布局总结
+              OpenResty非阻塞探究
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-07-31 ·
+                · 2020-02-18 ·
               </time>
               
             </div>
             
             <div class="post-content">
-              <h3 id="flex-弹性布局总结">Flex 弹性布局总结</h3>
-<h6 id="flex解决了什么问题">Flex解决了什么问题</h6>
-<p>增强了布局的语义的表达能力, 我们不需要再用晦涩的技巧去安排布局, 如页面footer效果</p>
-<pre><code>&lt;body&gt;
-    &lt;div class=&quot;wrapper&quot;&gt;
-        &lt;p&gt;404 not found&lt;/p&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;footer&quot;&gt;
-        &lt;p&gt;Copyright (c) 2008&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
+              <ul>
+<li>OpenResty的协程是基于nginx的master-worker模式</li>
+<li>Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程</li>
+<li>ngx_lua会自动把IO操作委托给Nginx事件处理机制</li>
+<li>OpenResty的非阻塞是利用worker上的协程不阻塞进程,和nodejs的代码级的非阻塞有区别</li>
+</ul>
+<pre><code>Nginx采用的是master-worker模型，也就是一个master进程管理多个worker进程，基本的时间处理都放在worker进程中，master进程负责全局初始化以及对worker进行的管理
+
+OpenResty中，每个worker进程使用一个LuaVM，当请求被分配到worker时，将在这个LuaVM中创建一个coroutine协程，协程之间数据隔离，每个协程都具有独立的全局变量
 </code></pre>
-<p>如果使用Flex布局, 表达清晰</p>
-<pre><code>body {
-  display: flex;
-  flex-direction: column;
-}
-.wrapper {
-  flex: 1;
-}
+<pre><code>ngx_lua是将Lua嵌入Nginx，让Nginx执行Lua脚本，并且高并发、非阻塞的处理各种请求。Lua内建协程，可以很好的将异步回调转换成顺序调用的形式。ngx_lua在Lua中进行的IO操作都会委托给Nginx的事件模型，从而实现非阻塞调用。开发者可以采用串行的方式编写程序，ngx_lua会自动的在进行阻塞的IO操作中终端，保存上下文，然后将IO操作委托给Nginx事件处理机制，在IO操作完成后，ngx_lua会恢复上下文，程序继续执行，这些操作都是对用户程序透明的
 </code></pre>
-<p>如果使用负边距</p>
-<pre><code>.wrapper {
-  height: 100%;
-  margin: 0 auto -2em;
-}
-.footer {
-  height: 2em;
-}
+<pre><code>ngx_lua模块的原理
+
+- 每个工作进程worker创建一个Lua虚拟机（LuaVM）,工作进程worker内部协议共享VM。
+-每个Nginx I/O原语封装后注入Lua虚拟机，并允许Lua代码直接访问。
+- 每个外部请求都由一个Lua协程处理，协程之间数据隔离。
+- Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程。
+- I/O等异步操作完成时，还原相关协程相关协议的上下文，并继续运行。
 </code></pre>
-<p>参考</p>
 <ul>
-<li>http://www.ruanyifeng.com/blog/2018/10/flexbox-form.html</li>
-<li>https://www.runoob.com/w3cnote/flex-grammar.html</li>
-<li>https://blog.csdn.net/weixin_33827965/article/details/89179897</li>
+<li><a href="https://zhuanlan.zhihu.com/p/48229675">Openresty踩坑日志 - 命令行导致阻塞</a></li>
+<li><a href="https://www.jianshu.com/p/cb1f67c4a97c">OpenResty工作原理</a></li>
 </ul>
 
             </div>
@@ -128,9 +116,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://github.com/yesky93/post/2019-07-30">
+            <a href="https://github.com/yesky93/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001">
               <h3 class="post-title">
-                2019-07-30
+                基于OpenResty的FluxGate 搭建记录 (Day 001)
               </h3>
             </a>
           </div>
