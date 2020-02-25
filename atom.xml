@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://localhost:4000</id>
+    <title>Gridea</title>
+    <updated>2020-02-16T15:25:48.020Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="http://localhost:4000"/>
+    <link rel="self" href="http://localhost:4000/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>http://localhost:4000/images/avatar.png</logo>
+    <icon>http://localhost:4000/favicon.ico</icon>
+    <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[基于OpenResty的CoinGate 搭建记录 (Day 001)]]></title>
+        <id>http://localhost:4000/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001</id>
+        <link href="http://localhost:4000/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001">
+        </link>
+        <updated>2020-02-16T12:50:33.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="使用restyhttp进行http请求">使用resty.http进行http请求</h1>
+<h3 id="访问https协议遇到的问题">访问https协议遇到的问题</h3>
+<ul>
+<li>通过 <code>{ ssl_verify = false }</code>来解决</li>
+</ul>
+<h3 id="通过网址发送请求需要配置resolver">通过网址发送请求需要配置resolver</h3>
+<pre><code>当我们需要在某一个请求内部发起这样一个 http 查询，采用 proxy_pass 是不行的（依赖 resolver 的 DNS，如果 DNS 有变化，必须要重新加载配置），并且由于 proxy_pass 不能直接设置 keepalive，导致每次请求都是短链接，性能损失严重。
+</code></pre>
+<pre><code>使用 resty.http，目前这个库只支持 ip ：port 的方式定义 url，其内部实现并没有支持 domain 解析。
+resty.http 是支持 set_keepalive 完成长连接，这样我们只需要让他支持 DNS 解析就能有完美解决方案
+</code></pre>
+<ul>
+<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/dns/use_dynamic_dns.html">参考</a></li>
+</ul>
+<h3 id="request-assign-的问题">request assign 的问题</h3>
+<pre><code>resolver 8.8.8.8 ipv6=off;
+</code></pre>
+<h1 id="记录日志">记录日志</h1>
+<pre><code>ngx.log(ngx.ERR, 'huobi:status:', res.status)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[OpenResty学习笔记]]></title>
+        <id>http://localhost:4000/post/openresty-xue-xi-bi-ji</id>
+        <link href="http://localhost:4000/post/openresty-xue-xi-bi-ji">
+        </link>
+        <updated>2020-02-15T09:03:19.000Z</updated>
+        <content type="html"><![CDATA[<pre><code> /usr/local/openresty/nginx/sbin/nginx  -p openresty-test
+ /usr/local/openresty/nginx/sbin/nginx -s stop  -p openresty-test 
+</code></pre>
+<ul>
+<li>
+<p>http://47.244.231.228:6639/api/coins?a=1&amp;b=2</p>
+</li>
+<li>
+<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/openresty/helloworld.html">参考</a></p>
+</li>
+</ul>
+<h1 id="使用restyhttp模块">使用resty.http模块</h1>
+<ul>
+<li>遇到的问题
+<ul>
+<li>https://github.com/GUI/lua-resty-auto-ssl/issues/113</li>
+<li>https://github.com/ledgetech/lua-resty-http/issues/68</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[在Ubuntu安装Ta-Lib以及使用]]></title>
+        <id>http://localhost:4000/post/zai-ubuntu-an-zhuang-ta-lib</id>
+        <link href="http://localhost:4000/post/zai-ubuntu-an-zhuang-ta-lib">
+        </link>
+        <updated>2020-02-06T03:21:52.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://medium.com/@artiya4u/installing-ta-lib-on-ubuntu-944d8ca24eae">安装</a></li>
+</ul>
+<pre><code>#!/usr/bin/env bash
+sudo apt install build-essential wget -y
+wget https://artiya4u.keybase.pub/TA-lib/ta-lib-0.4.0-src.tar.gz
+tar -xvf ta-lib-0.4.0-src.tar.gz
+cd ta-lib/
+./configure --prefix=/usr
+make
+sudo make install
+</code></pre>
+<pre><code>sudo pip install TA-Lib
+</code></pre>
+<ul>
+<li><a href="https://www.lizenghai.com/archives/1320.html">使用</a></li>
+<li><a href="https://www.v2ex.com/t/342110">K线识别</a></li>
+<li><a href="https://cryptotrader.org/talib">Manual</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[统计学视角下的金融高频数据挖掘理论与方法研究]]></title>
+        <id>http://localhost:4000/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu</id>
+        <link href="http://localhost:4000/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu">
+        </link>
+        <updated>2020-02-06T02:22:42.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>豆瓣链接 https://book.douban.com/subject/26465344/</li>
+<li>购买链接 http://product.dangdang.com/23720602.html</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Flutter Chart LIbrary]]></title>
+        <id>http://localhost:4000/post/flutter-chart-library</id>
+        <link href="http://localhost:4000/post/flutter-chart-library">
+        </link>
+        <updated>2020-02-02T01:14:24.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://flutterawesome.com/a-flutter-widget-to-use-echarts-in-a-reactive-way/">with echarts</a></li>
+<li>https://github.com/imaNNeoFighT/fl_chart</li>
+<li><a href="https://www.dunebook.com/flutter-chart/">Charts Library</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[OpenResty学习]]></title>
+        <id>http://localhost:4000/post/openresty-xue-xi</id>
+        <link href="http://localhost:4000/post/openresty-xue-xi">
+        </link>
+        <updated>2020-01-30T08:08:57.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>https://www.cnblogs.com/sunwubin/p/10529434.html</li>
+<li><a href="https://blog.csdn.net/zhangyunpengchang/article/details/88975186">mac上搭建开发环境</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[VSCode远程模式]]></title>
+        <id>http://localhost:4000/post/vscode-yuan-cheng-mo-shi</id>
+        <link href="http://localhost:4000/post/vscode-yuan-cheng-mo-shi">
+        </link>
+        <updated>2019-12-30T03:26:12.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="文档">文档</h1>
+<ul>
+<li><a href="https://code.visualstudio.com/docs/remote/ssh">Remote Development using SSH</a></li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[创建GUI的新方式 - 飞冰]]></title>
+        <id>http://localhost:4000/post/chuang-jian-gui-de-xin-fang-shi-fei-bing</id>
+        <link href="http://localhost:4000/post/chuang-jian-gui-de-xin-fang-shi-fei-bing">
+        </link>
+        <updated>2019-12-07T21:10:16.000Z</updated>
+        <content type="html"><![CDATA[<p>https://ice.work/docs/guide/about</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[移动端跨平台Canvas解决方案 ]]></title>
+        <id>http://localhost:4000/post/yi-dong-duan-kua-ping-tai-canvas-jie-jue-fang-an</id>
+        <link href="http://localhost:4000/post/yi-dong-duan-kua-ping-tai-canvas-jie-jue-fang-an">
+        </link>
+        <updated>2019-12-07T21:00:36.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="gcanvas">GCanvas</h3>
+<ul>
+<li>https://github.com/alibaba/GCanvas</li>
+</ul>
+<h3 id="股票图形库">股票图形库</h3>
+<ul>
+<li>https://blog.csdn.net/seerline/article/details/80075359</li>
+<li>https://github.com/seerline/clchart</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[量化开发 2019-10-12]]></title>
+        <id>http://localhost:4000/post/liang-hua-kai-fa-2019-10-12</id>
+        <link href="http://localhost:4000/post/liang-hua-kai-fa-2019-10-12">
+        </link>
+        <updated>2019-10-12T07:23:11.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="任务概述">任务概述</h1>
+<ul>
+<li>exnet-fmz 控制执行</li>
+<li>策略存放在FMZ上，在使用时，一个机器人搭载一个策略</li>
+<li>exnet-trade-hub 负责转账</li>
+</ul>
+<h1 id="策略思想">策略思想</h1>
+<h3 id="背景">背景</h3>
+<ul>
+<li>整体数字货币市场存在相当大的不确定性</li>
+<li>处于熊市，其原因为整体的经济环境和落地不及预期</li>
+<li>区块链技术还是在不断的发展，长期来看有成为价值互联网的趋势</li>
+<li>世界的地缘经济对抗造成对比特币的需求增长</li>
+<li>大部分山寨币看不到希望，有归零的可能性</li>
+<li>整个市场的头部还是交易所</li>
+</ul>
+<h3 id="描述">描述</h3>
+<h6 id="策略一-跳跃">策略一 &lt;跳跃&gt;</h6>
+<ul>
+<li>抓住日内趋势</li>
+<li>观察每一个目标,给予评分</li>
+<li>不断形成序列</li>
+<li>每一次买入设置不超过x%的期望值</li>
+</ul>
+<h6 id="策略二-风">策略二 &lt;风&gt;</h6>
+<ul>
+<li>抓住上涨趋势</li>
+<li>在可控范围内 买入卖出增加头寸</li>
+</ul>
+<h3 id="特点">特点</h3>
+<ul>
+<li>以天为单位</li>
+<li>较高频次的交易</li>
+<li>跨交易所</li>
+</ul>
+<h3 id="评估系统">评估系统</h3>
+<ul>
+<li>K线形态</li>
+<li>交易量</li>
+</ul>
+<h1 id="notes">Notes:</h1>
+<ul>
+<li>量化只是工具，是策略的执行体</li>
+<li>策略本身就是为了控制一进一出, 即买入和卖出</li>
+<li>回测是度量策略好坏的一种概率性方法，实盘的情况可能不尽相同</li>
+<li>识别趋势是整个策略的背景</li>
+</ul>
+]]></content>
+    </entry>
+</feed>

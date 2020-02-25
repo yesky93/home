@@ -1,0 +1,147 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JSON Web Token | Gridea</title>
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico?v=1581866715097">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="http://localhost:4000/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="http://localhost:4000">
+  <img class="avatar" src="http://localhost:4000/images/avatar.png?v=1581866715097" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="http://localhost:4000/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              JSON Web Token
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-08-06 ·
+              </time>
+              
+            </div>
+            
+            <div class="post-content">
+              <h6 id="增强身份认证的可扩展性">增强身份认证的可扩展性</h6>
+<pre><code>以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名（详见后文）。
+
+服务器就不保存任何 session 数据了，也就是说，服务器变成无状态了，从而比较容易实现扩展。
+</code></pre>
+<h6 id="结构">结构</h6>
+<ul>
+<li>Header<br>
+- 描述 JWT 的元数据<br>
+- <code>alg</code> 签名的算法<br>
+- <code>typ</code> 个令牌（token）的类型（type）</li>
+<li>Payload<br>
+- iss (issuer)：签发人<br>
+- exp (expiration time)：过期时间<br>
+- sub (subject)：主题<br>
+- aud (audience)：受众<br>
+- nbf (Not Before)：生效时间<br>
+- iat (Issued At)：签发时间<br>
+- jti (JWT ID)：编号<br>
+- <code>除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子。</code></li>
+<li>Signature<br>
+- <code>部分是对前两部分的签名，防止数据篡改。</code><br>
+-</li>
+<li></li>
+</ul>
+<p>参考</p>
+<ul>
+<li>http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html</li>
+<li>https://tools.ietf.org/html/rfc7519</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="http://localhost:4000/post/ios-kai-fa-xiao-jie">
+              <h3 class="post-title">
+                IOS开发小结
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="http://localhost:4000/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

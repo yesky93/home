@@ -1,0 +1,165 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>python 拾遗 | Gridea</title>
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico?v=1581866715097">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="http://localhost:4000/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="http://localhost:4000">
+  <img class="avatar" src="http://localhost:4000/images/avatar.png?v=1581866715097" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="http://localhost:4000/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              python 拾遗
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-06-11 ·
+              </time>
+              
+            </div>
+            
+            <div class="post-content">
+              <h3 id="可遍历化">可遍历化</h3>
+<p><code>__iter__</code>和<code>__next__</code> 来让一个对象可以像数组一样可遍历:</p>
+<pre><code>for i in a:
+    do_something()
+</code></pre>
+<blockquote>
+<p>Iterable: 有迭代能力的对象，一个类，实现了__iter__，那么就认为它有迭代能力，通常此函数必须返回一个实现了__next__的对象，如果自己实现了，你可以返回self，当然这个返回值不是必须的；<br>
+Iterator: 迭代器(当然也是Iterable)，同时实现了__iter__和__next__的对象，缺少任何一个都不算是Iterator，比如上面例子中，A()可以是一个Iterable，但是A()和B()都不能算是和Iterator，因为A只实现了__iter__，而B只实现了__next__()。</p>
+</blockquote>
+<h3 id="python-3里处理函数返回iterable-而不是列表对象">python 3里处理函数返回Iterable 而不是列表对象</h3>
+<ul>
+<li>python 2</li>
+</ul>
+<pre><code> map(chr, [66, 53, 0, 94])
+['B', '5', '\x00', '^']
+</code></pre>
+<ul>
+<li>python3</li>
+</ul>
+<pre><code>&gt;&gt;&gt; map(chr, [66, 53, 0, 94])
+&lt;map object at 0x00AF5570&gt;
+</code></pre>
+<p>python3 里返回的是可以遍历的对象，而不是整个列表。可以使用list来转化,<br>
+<code>list(map(chr,[66,53,0,94]))</code></p>
+<p>或者从一开始就使用list comprehension<br>
+<code>[chr(x) for x in [66,53,0,94]]</code></p>
+<h3 id="pep-448-additional-unpacking-generalizations">PEP 448 - Additional Unpacking Generalizations</h3>
+<blockquote>
+<p>extends the allowed uses of the * iterable unpacking operator and ** dictionary unpacking operator. It is now possible to use an arbitrary number of unpackings in function calls:</p>
+</blockquote>
+<pre><code>&gt;&gt;&gt; *range(4), 4
+(0, 1, 2, 3, 4)
+
+&gt;&gt;&gt; [*range(4), 4]
+[0, 1, 2, 3, 4]
+
+&gt;&gt;&gt; {*range(4), 4, *(5, 6, 7)}
+{0, 1, 2, 3, 4, 5, 6, 7}
+
+&gt;&gt;&gt; {'x': 1, **{'y': 2}}
+{'x': 1, 'y': 2}
+</code></pre>
+<h3 id="参考">参考</h3>
+<ul>
+<li><a href="https://www.jianshu.com/p/1b0686bc166d">python魔术方法-迭代器(<strong>iter__和__next</strong>)</a></li>
+<li>https://stackoverflow.com/questions/1303347/getting-a-map-to-return-a-list-in-python-3-x</li>
+<li>https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="http://localhost:4000/post/dian-ying-zhong-tu-dao-hai-zhan">
+              <h3 class="post-title">
+                电影 - 中途岛海战
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="http://localhost:4000/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,137 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>基于OpenResty的CoinGate 搭建记录 (Day 001) | Gridea</title>
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico?v=1581866715097">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="http://localhost:4000/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="http://localhost:4000">
+  <img class="avatar" src="http://localhost:4000/images/avatar.png?v=1581866715097" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="http://localhost:4000/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              基于OpenResty的CoinGate 搭建记录 (Day 001)
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2020-02-16 ·
+              </time>
+              
+            </div>
+            
+            <div class="post-content">
+              <h1 id="使用restyhttp进行http请求">使用resty.http进行http请求</h1>
+<h3 id="访问https协议遇到的问题">访问https协议遇到的问题</h3>
+<ul>
+<li>通过 <code>{ ssl_verify = false }</code>来解决</li>
+</ul>
+<h3 id="通过网址发送请求需要配置resolver">通过网址发送请求需要配置resolver</h3>
+<pre><code>当我们需要在某一个请求内部发起这样一个 http 查询，采用 proxy_pass 是不行的（依赖 resolver 的 DNS，如果 DNS 有变化，必须要重新加载配置），并且由于 proxy_pass 不能直接设置 keepalive，导致每次请求都是短链接，性能损失严重。
+</code></pre>
+<pre><code>使用 resty.http，目前这个库只支持 ip ：port 的方式定义 url，其内部实现并没有支持 domain 解析。
+resty.http 是支持 set_keepalive 完成长连接，这样我们只需要让他支持 DNS 解析就能有完美解决方案
+</code></pre>
+<ul>
+<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/dns/use_dynamic_dns.html">参考</a></li>
+</ul>
+<h3 id="request-assign-的问题">request assign 的问题</h3>
+<pre><code>resolver 8.8.8.8 ipv6=off;
+</code></pre>
+<h1 id="记录日志">记录日志</h1>
+<pre><code>ngx.log(ngx.ERR, 'huobi:status:', res.status)
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="http://localhost:4000/post/openresty-xue-xi-bi-ji">
+              <h3 class="post-title">
+                OpenResty学习笔记
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="http://localhost:4000/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

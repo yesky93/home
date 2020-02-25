@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flex布局总结 | Gridea</title>
+<link rel="shortcut icon" href="http://localhost:4000/favicon.ico?v=1581866715097">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="http://localhost:4000/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="http://localhost:4000">
+  <img class="avatar" src="http://localhost:4000/images/avatar.png?v=1581866715097" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="http://localhost:4000/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="http://localhost:4000/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Flex布局总结
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-07-31 ·
+              </time>
+              
+            </div>
+            
+            <div class="post-content">
+              <h3 id="flex-弹性布局总结">Flex 弹性布局总结</h3>
+<h6 id="flex解决了什么问题">Flex解决了什么问题</h6>
+<p>增强了布局的语义的表达能力, 我们不需要再用晦涩的技巧去安排布局, 如页面footer效果</p>
+<pre><code>&lt;body&gt;
+    &lt;div class=&quot;wrapper&quot;&gt;
+        &lt;p&gt;404 not found&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;footer&quot;&gt;
+        &lt;p&gt;Copyright (c) 2008&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+<p>如果使用Flex布局, 表达清晰</p>
+<pre><code>body {
+  display: flex;
+  flex-direction: column;
+}
+.wrapper {
+  flex: 1;
+}
+</code></pre>
+<p>如果使用负边距</p>
+<pre><code>.wrapper {
+  height: 100%;
+  margin: 0 auto -2em;
+}
+.footer {
+  height: 2em;
+}
+</code></pre>
+<p>参考</p>
+<ul>
+<li>http://www.ruanyifeng.com/blog/2018/10/flexbox-form.html</li>
+<li>https://www.runoob.com/w3cnote/flex-grammar.html</li>
+<li>https://blog.csdn.net/weixin_33827965/article/details/89179897</li>
+</ul>
+
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="http://localhost:4000/post/2019-07-30">
+              <h3 class="post-title">
+                2019-07-30
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  <a class="rss" href="http://localhost:4000/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
