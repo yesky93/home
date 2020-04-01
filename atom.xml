@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/yesky93</id>
     <title>ToMars</title>
-    <updated>2020-02-25T09:26:28.923Z</updated>
+    <updated>2020-04-01T20:15:26.989Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/yesky93"/>
     <link rel="self" href="https://github.com/yesky93/atom.xml"/>
@@ -11,262 +11,228 @@
     <icon>https://github.com/yesky93/favicon.ico</icon>
     <rights>All rights reserved 2020, ToMars</rights>
     <entry>
-        <title type="html"><![CDATA[基于OpenResty的FluxGate 搭建记录 (Day 002)]]></title>
-        <id>https://github.com/yesky93/post/ji-yu-openresty-de-fluxgate-da-jian-ji-lu-day-002</id>
-        <link href="https://github.com/yesky93/post/ji-yu-openresty-de-fluxgate-da-jian-ji-lu-day-002">
+        <title type="html"><![CDATA[树莓派的文章]]></title>
+        <id>https://github.com/yesky93/post/VazY4LJyY</id>
+        <link href="https://github.com/yesky93/post/VazY4LJyY">
         </link>
-        <updated>2020-02-23T01:39:51.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="当前的问题">当前的问题</h1>
-<h3 id="非并发">非并发</h3>
-<ul>
-<li>使用resty.http发送的多个请求没有并发执行</li>
-</ul>
-<h1 id="解决方案">解决方案</h1>
-<h3 id="使用capture_multi">使用capture_multi</h3>
-<ul>
-<li>会有占用内存大的问题?</li>
-</ul>
-<h3 id="使用light-thread">使用light thread</h3>
-<h3 id="使用cosocket">使用cosocket</h3>
-<h1 id="尝试使用capture_multi来解决">尝试使用capture_multi来解决</h1>
-<pre><code>local binance_ticker_api = '/access_huobi'
-local okex_ticker_api = '/access_huobi'
-local huobi_ticker_api = '/access_huobi'
-
-local list = {}
-local apis = {binance_ticker_api, okex_ticker_api, huobi_ticker_api}
-for idx,api in pairs(apis) do
-    ngx.log(ngx.ERR, 'api', idx,' ', api)
-    local tmp = {api,{method=ngx.HTTP_GET}};
-    table.insert(list, tmp);
-end
-
-local response = {ngx.location.capture_multi(list)}
-
-local data = {};
-for num,resp in pairs(response) do
-    ngx.log(ngx.ERR, 'resp', num,' ', resp['uri'])
-    ngx.log(ngx.ERR, 'resp', resp[&quot;status&quot;])
-    --ngx.log(ngx.ERR, 'resp', cjson.encode(resp['header']))
-    ngx.log(ngx.ERR, 'resp', resp[&quot;body&quot;])
-    resp = cjson.decode(resp[&quot;body&quot;]);
-    -- data[resp[&quot;uri&quot;]] = resp;
-end;
-</code></pre>
-<h3 id="遇到的问题">遇到的问题</h3>
-<ul>
-<li>请求的内容是gzip压缩的 不能直接处理
-<ul>
-<li>解决: 在配置文件中的<code>location</code>中写入<code>proxy_set_header Accept-Encoding &quot;&quot;;</code></li>
-</ul>
-</li>
-</ul>
-<h1 id="使用协程-light-thread">使用协程 light thread</h1>
-<h3 id="遇到的问题-2">遇到的问题</h3>
-<ul>
-<li><code>socket busy connecting</code>
-<ul>
-<li>这是因为每个协程都用了一个<code>httpc</code></li>
-<li>把<code>local httpc = http.new()</code>代码放入每个请求方法内部</li>
-<li>每个协程使用自己的<code>httpc</code>来请求</li>
-</ul>
-</li>
-</ul>
-<h3 id="测试">测试</h3>
-<ul>
-<li>非协程花费时间 <code>0.95999979972839</code></li>
-<li>协程花费时间 0.28399991989136</li>
+        <updated>2020-04-01T20:14:30.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>https://mlapp.cn/376.html</li>
+<li>https://zhuanlan.zhihu.com/p/107596869</li>
+<li>https://zhuanlan.zhihu.com/p/61573634</li>
 <li></li>
 </ul>
-<h1 id="cosocket">cosocket</h1>
-<pre><code>cosocket = coroutine + socket
-</code></pre>
-<h6 id="参考">[参考]</h6>
-<ul>
-<li><a href="https://www.cnblogs.com/babycomeon/p/11109517.html">use capture_multi &amp; light thread</a></li>
-<li><a href="https://github.com/ledgetech/lua-resty-http/issues/49">resty.http是否可以做到非阻塞</a></li>
-<li><a href="https://github.com/openresty/lua-nginx-module#ngxthreadspawn">ngx.thread.spawn</a></li>
-<li><a href="https://segmentfault.com/a/1190000007957976?_ea=1509465">配置openresty使用lua并发请求API</a></li>
-<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/ngx_lua/whats_cosocket.html">cosocket</a></li>
-</ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[OpenResty非阻塞探究]]></title>
-        <id>https://github.com/yesky93/post/openresty-fei-zu-sai-tan-jiu</id>
-        <link href="https://github.com/yesky93/post/openresty-fei-zu-sai-tan-jiu">
+        <title type="html"><![CDATA[[Python] 自定义JSON Encoder 和 json.tool对使用]]></title>
+        <id>https://github.com/yesky93/post/K4ZnaJPX1</id>
+        <link href="https://github.com/yesky93/post/K4ZnaJPX1">
         </link>
-        <updated>2020-02-17T22:21:45.000Z</updated>
+        <updated>2020-03-29T03:13:10.000Z</updated>
         <content type="html"><![CDATA[<ul>
-<li>OpenResty的协程是基于nginx的master-worker模式</li>
-<li>Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程</li>
-<li>ngx_lua会自动把IO操作委托给Nginx事件处理机制</li>
-<li>OpenResty的非阻塞是利用worker上的协程不阻塞进程,和nodejs的代码级的非阻塞有区别</li>
+<li>python只能对几种特定的类型进行json转换</li>
+<li>需要使用JSONEncoder来指定转换方式</li>
 </ul>
-<pre><code>Nginx采用的是master-worker模型，也就是一个master进程管理多个worker进程，基本的时间处理都放在worker进程中，master进程负责全局初始化以及对worker进行的管理
+<pre><code>class CustomEncoder(json.JSONEncoder):
+  def default(self, x):
+    if isinstance(x, datetime):
+      return int(x.timestamp())
+    return super().default(self, x)
 
-OpenResty中，每个worker进程使用一个LuaVM，当请求被分配到worker时，将在这个LuaVM中创建一个coroutine协程，协程之间数据隔离，每个协程都具有独立的全局变量
+USER_DATA = dict(
+  id = 1, name = 'wxnacy', ts = datetime.now()
+)
+print(json.dumps(USER_DATA, cls=CustomEncoder))
+# {&quot;id&quot;: 1, &quot;name&quot;: &quot;wxnacy&quot;, &quot;ts&quot;: 1562938926}
 </code></pre>
-<pre><code>ngx_lua是将Lua嵌入Nginx，让Nginx执行Lua脚本，并且高并发、非阻塞的处理各种请求。Lua内建协程，可以很好的将异步回调转换成顺序调用的形式。ngx_lua在Lua中进行的IO操作都会委托给Nginx的事件模型，从而实现非阻塞调用。开发者可以采用串行的方式编写程序，ngx_lua会自动的在进行阻塞的IO操作中终端，保存上下文，然后将IO操作委托给Nginx事件处理机制，在IO操作完成后，ngx_lua会恢复上下文，程序继续执行，这些操作都是对用户程序透明的
+<pre><code>echo '{&quot;json&quot;: &quot;obj&quot;}' | python -m json.tool
 </code></pre>
-<pre><code>ngx_lua模块的原理
-
-- 每个工作进程worker创建一个Lua虚拟机（LuaVM）,工作进程worker内部协议共享VM。
--每个Nginx I/O原语封装后注入Lua虚拟机，并允许Lua代码直接访问。
-- 每个外部请求都由一个Lua协程处理，协程之间数据隔离。
-- Lua代码调用I/O操作等异步时，会挂起当前协程，而不阻塞工作机进程。
-- I/O等异步操作完成时，还原相关协程相关协议的上下文，并继续运行。
-</code></pre>
+<h3 id="参考">参考</h3>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/48229675">Openresty踩坑日志 - 命令行导致阻塞</a></li>
-<li><a href="https://www.jianshu.com/p/cb1f67c4a97c">OpenResty工作原理</a></li>
+<li>https://www.jb51.net/article/165378.htm</li>
 </ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[基于OpenResty的FluxGate 搭建记录 (Day 001)]]></title>
-        <id>https://github.com/yesky93/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001</id>
-        <link href="https://github.com/yesky93/post/ji-yu-openresty-de-coingate-da-jian-ji-lu-day-001">
+        <title type="html"><![CDATA[Linked Data and GraphQL]]></title>
+        <id>https://github.com/yesky93/post/hKbZym-vI</id>
+        <link href="https://github.com/yesky93/post/hKbZym-vI">
         </link>
-        <updated>2020-02-16T12:50:33.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="使用restyhttp进行http请求">使用resty.http进行http请求</h1>
-<h5 id="访问https协议遇到的问题">访问https协议遇到的问题</h5>
+        <updated>2020-03-25T22:08:00.000Z</updated>
+        <content type="html"><![CDATA[<p>https://comunica.github.io/Article-ISWC2018-Demo-GraphQlLD/</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[IP 地址 224.0.0.1]]></title>
+        <id>https://github.com/yesky93/post/Q0h4QsFID</id>
+        <link href="https://github.com/yesky93/post/Q0h4QsFID">
+        </link>
+        <updated>2020-03-25T20:59:44.000Z</updated>
+        <content type="html"><![CDATA[<p>224.0.0.1 所有主机的地址<br>
+224.0.0.2 所有组播路由器的地址<br>
+224.0.0.3 不分配</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[通过Github API v4学习GraphQL]]></title>
+        <id>https://github.com/yesky93/post/i5jGXggk9</id>
+        <link href="https://github.com/yesky93/post/i5jGXggk9">
+        </link>
+        <updated>2020-03-25T15:19:15.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="使用graphql的原因">使用GraphQL的原因</h3>
 <ul>
-<li>通过 <code>{ ssl_verify = false }</code>来解决</li>
+<li>Strongly typed. The schema defines an API's type system and all object relationships.</li>
+<li>Introspective. A client can query the schema for details about the schema</li>
+<li>Hierarchical. The shape of a GraphQL call mirrors the shape of the JSON data it returns.</li>
+<li>The API traverses and returns application data based on the schema definitions, independent of how the data is stored</li>
 </ul>
-<h5 id="通过网址发送请求需要配置resolver">通过网址发送请求需要配置resolver</h5>
-<pre><code>当我们需要在某一个请求内部发起这样一个 http 查询，采用 proxy_pass 是不行的（依赖 resolver 的 DNS，如果 DNS 有变化，必须要重新加载配置），并且由于 proxy_pass 不能直接设置 keepalive，导致每次请求都是短链接，性能损失严重。
+<h3 id="graphql的定义">GraphQL的定义</h3>
+<pre><code>An application layer. GraphQL is not a storage model or a database query language. The graph refers to graph structures defined in the schema, where nodes define objects and edges define relationships between objects.
 </code></pre>
-<pre><code>使用 resty.http，目前这个库只支持 ip ：port 的方式定义 url，其内部实现并没有支持 domain 解析。
-resty.http 是支持 set_keepalive 完成长连接，这样我们只需要让他支持 DNS 解析就能有完美解决方案
-</code></pre>
+<h3 id="参考">参考</h3>
 <ul>
-<li><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/dns/use_dynamic_dns.html">参考</a></li>
-</ul>
-<h5 id="request-assign-的问题">request assign 的问题</h5>
-<pre><code>resolver 8.8.8.8 ipv6=off;
-</code></pre>
-<h1 id="记录日志">记录日志</h1>
-<pre><code>ngx.log(ngx.ERR, 'huobi:status:', res.status)
-</code></pre>
-<h1 id="了解grpc">了解gRPC</h1>
-<ul>
-<li><a href="https://medium.com/@jeffzzq/calling-a-grpc-service-from-nginx-27d23198563e">Call gRPC from lua</a></li>
-<li><a href="https://blog.csdn.net/sunt2018/article/details/90176015">python gRPC</a></li>
+<li>https://developer.github.com/v4/</li>
+<li>https://rollout.io/blog/an-introduction-to-graphql-via-the-github-api/</li>
+<li>https://developer.github.com/v4/guides/intro-to-graphql/#discovering-the-graphql-api</li>
+<li>https://developer.github.com/v4/guides/intro-to-graphql/#node</li>
+<li>https://medium.com/@int128/github-graphql-recepies-a3721709145b</li>
+<li>https://blog.ssanj.net/posts/2017-07-30-querying-for-commits-on-master-using-github-graphql-api-v4.html</li>
+<li>https://www.contentstack.com/docs/developers/use-the-graphql-queries-with-apollo-sdks/use-graphql-queries-with-apollo-client-javascript-sdk</li>
 </ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[OpenResty学习笔记]]></title>
-        <id>https://github.com/yesky93/post/openresty-xue-xi-bi-ji</id>
-        <link href="https://github.com/yesky93/post/openresty-xue-xi-bi-ji">
+        <title type="html"><![CDATA[从Github API了解GIT]]></title>
+        <id>https://github.com/yesky93/post/QbICAR6nN</id>
+        <link href="https://github.com/yesky93/post/QbICAR6nN">
         </link>
-        <updated>2020-02-15T09:03:19.000Z</updated>
-        <content type="html"><![CDATA[<pre><code> /usr/local/openresty/nginx/sbin/nginx  -p openresty-test
- /usr/local/openresty/nginx/sbin/nginx -s stop  -p openresty-test 
+        <updated>2020-03-22T15:33:53.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="数据结构">数据结构</h3>
+<pre><code>type NodeEntry = {
+    path: string,
+    mode: string,
+    type: &quot;blob&quot; | &quot;tree&quot;,
+    sha: string,
+    size?: number,
+    url: string
+}
+</code></pre>
+<h3 id="git是一种kv数据库">git是一种KV数据库</h3>
+<pre><code>Git is a content-addressable filesystem. Great. What does that mean? It means that at the core of Git is a simple key-value data store. What this means is that you can insert any kind of content into a Git repository, for which Git will hand you back a unique key you can use later to retrieve that content.
 </code></pre>
 <ul>
-<li>
-<p>http://47.244.231.228:6639/api/coins?a=1&amp;b=2</p>
+<li>使用tree的概念管理数据
+<ul>
+<li>文件是tree, commits也是tree</li>
+</ul>
 </li>
-<li>
-<p><a href="https://moonbingbing.gitbooks.io/openresty-best-practices/openresty/helloworld.html">参考</a></p>
-</li>
-</ul>
-<h1 id="使用restyhttp模块">使用resty.http模块</h1>
+<li>关于<code>mode</code>
 <ul>
-<li>遇到的问题
-<ul>
-<li>https://github.com/GUI/lua-resty-auto-ssl/issues/113</li>
-<li>https://github.com/ledgetech/lua-resty-http/issues/68</li>
+<li>&quot;In this case, you’re specifying a mode of 100644, which means it’s a normal file. Other options are 100755, which means it’s an executable file; and 120000, which specifies a symbolic link. The mode is taken from normal UNIX modes but is much less flexible — these three modes are the only ones that are valid for files (blobs) in Git (although other modes are used for directories and submodules).&quot;</li>
 </ul>
 </li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[在Ubuntu安装Ta-Lib以及使用]]></title>
-        <id>https://github.com/yesky93/post/zai-ubuntu-an-zhuang-ta-lib</id>
-        <link href="https://github.com/yesky93/post/zai-ubuntu-an-zhuang-ta-lib">
-        </link>
-        <updated>2020-02-06T03:21:52.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li><a href="https://medium.com/@artiya4u/installing-ta-lib-on-ubuntu-944d8ca24eae">安装</a></li>
-</ul>
-<pre><code>#!/usr/bin/env bash
-sudo apt install build-essential wget -y
-wget https://artiya4u.keybase.pub/TA-lib/ta-lib-0.4.0-src.tar.gz
-tar -xvf ta-lib-0.4.0-src.tar.gz
-cd ta-lib/
-./configure --prefix=/usr
-make
-sudo make install
+<h3 id="branch是一种snapshot的pointer">branch是一种snapshot的pointer</h3>
+<pre><code>A branch in Git is simply a lightweight movable pointer to one of these commits. The default branch name in Git is master. As you start making commits, you’re given a master branch that points to the last commit you made. Every time you commit, the master branch pointer moves forward automatically.
 </code></pre>
-<pre><code>sudo pip install TA-Lib
-</code></pre>
+<h3 id="参考">参考</h3>
 <ul>
-<li><a href="https://www.lizenghai.com/archives/1320.html">使用</a></li>
-<li><a href="https://www.v2ex.com/t/342110">K线识别</a></li>
-<li><a href="https://cryptotrader.org/talib">Manual</a></li>
+<li>https://git-scm.com/book/en/v2/Git-Internals-Git-Objects</li>
+<li>https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell</li>
+<li></li>
 </ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[统计学视角下的金融高频数据挖掘理论与方法研究]]></title>
-        <id>https://github.com/yesky93/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu</id>
-        <link href="https://github.com/yesky93/post/tong-ji-xue-shi-jiao-xia-de-jin-rong-gao-pin-shu-ju-wa-jue-li-lun-yu-fang-fa-yan-jiu">
+        <title type="html"><![CDATA[isomorphic-git 使用总结]]></title>
+        <id>https://github.com/yesky93/post/dX0iHfRCv</id>
+        <link href="https://github.com/yesky93/post/dX0iHfRCv">
         </link>
-        <updated>2020-02-06T02:22:42.000Z</updated>
+        <updated>2020-03-22T15:04:35.000Z</updated>
         <content type="html"><![CDATA[<ul>
-<li>豆瓣链接 https://book.douban.com/subject/26465344/</li>
-<li>购买链接 http://product.dangdang.com/23720602.html</li>
+<li>在页面上使用indexDB来模拟文件系统</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Flutter Chart LIbrary]]></title>
-        <id>https://github.com/yesky93/post/flutter-chart-library</id>
-        <link href="https://github.com/yesky93/post/flutter-chart-library">
-        </link>
-        <updated>2020-02-02T01:14:24.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li><a href="https://flutterawesome.com/a-flutter-widget-to-use-echarts-in-a-reactive-way/">with echarts</a></li>
-<li>https://github.com/imaNNeoFighT/fl_chart</li>
-<li><a href="https://www.dunebook.com/flutter-chart/">Charts Library</a></li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[OpenResty学习]]></title>
-        <id>https://github.com/yesky93/post/openresty-xue-xi</id>
-        <link href="https://github.com/yesky93/post/openresty-xue-xi">
-        </link>
-        <updated>2020-01-30T08:08:57.000Z</updated>
-        <content type="html"><![CDATA[<ul>
-<li>https://www.cnblogs.com/sunwubin/p/10529434.html</li>
-<li><a href="https://blog.csdn.net/zhangyunpengchang/article/details/88975186">mac上搭建开发环境</a></li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[VSCode远程模式]]></title>
-        <id>https://github.com/yesky93/post/vscode-yuan-cheng-mo-shi</id>
-        <link href="https://github.com/yesky93/post/vscode-yuan-cheng-mo-shi">
-        </link>
-        <updated>2019-12-30T03:26:12.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="文档">文档</h1>
+<h3 id="参考">参考</h3>
 <ul>
-<li><a href="https://code.visualstudio.com/docs/remote/ssh">Remote Development using SSH</a></li>
+<li>https://github.com/nodegit/nodegit</li>
+<li></li>
 </ul>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[创建GUI的新方式 - 飞冰]]></title>
-        <id>https://github.com/yesky93/post/chuang-jian-gui-de-xin-fang-shi-fei-bing</id>
-        <link href="https://github.com/yesky93/post/chuang-jian-gui-de-xin-fang-shi-fei-bing">
+        <title type="html"><![CDATA[idea - 利用pyppeteer实现python版的excel]]></title>
+        <id>https://github.com/yesky93/post/Up9brV0v1</id>
+        <link href="https://github.com/yesky93/post/Up9brV0v1">
         </link>
-        <updated>2019-12-07T21:10:16.000Z</updated>
-        <content type="html"><![CDATA[<p>https://ice.work/docs/guide/about</p>
+        <updated>2020-03-16T18:57:32.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>https://pypi.org/project/pyppeteer/</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[idea - 为自动化提供语义命令]]></title>
+        <id>https://github.com/yesky93/post/tGFQZH0sr</id>
+        <link href="https://github.com/yesky93/post/tGFQZH0sr">
+        </link>
+        <updated>2020-03-16T18:04:14.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>针对不同的网站挖掘自动化语义
+<ul>
+<li>举例
+<ul>
+<li>twitter
+<ul>
+<li>登录: twitter.login(...)</li>
+<li>关注: twitter.addFriend</li>
+</ul>
+</li>
+<li>Bug Track System
+<ul>
+<li>Report: BTS.report(...)</li>
+<li>comment: BTS.comment(...)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用puppeteer执行自动化动作</li>
+</ul>
+<h3 id="挑战">挑战</h3>
+<ul>
+<li>自动化需要多个网站/系统的衔接 如何表达衔接?</li>
+<li>一个网站/系统可能有多个语义系统, 插件市场?</li>
+<li>统一登录?</li>
+<li>密钥管理?</li>
+<li>语义脚本的安全性</li>
+</ul>
+<h3 id="参考">参考</h3>
+<ul>
+<li>https://github.com/chinanf-boy/awesome-puppeteer-zh 提到多种自动化工具</li>
+<li>https://github.com/transitive-bullshit/puppeteer-github-cli</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[可以查询天气历史记录的网站]]></title>
+        <id>https://github.com/yesky93/post/q_DT4W4Uu</id>
+        <link href="https://github.com/yesky93/post/q_DT4W4Uu">
+        </link>
+        <updated>2020-03-16T15:32:05.000Z</updated>
+        <content type="html"><![CDATA[<p>https://www.wolframalpha.com/input/?i=weather+on+9%2F3%2F1983+in+chengdu%2C+china</p>
+<ul>
+<li>一个很神奇的网站，可以查询到一个地方历年来的气象记录</li>
+<li>对于成都地区可以查到1973年的记录</li>
+<li>WMO56196是成都地区的气象站代码</li>
+<li>华氏温度到摄氏度的转换
+<ul>
+<li>(F - 32 ) * (5 / 9)</li>
+</ul>
+</li>
+<li></li>
+</ul>
 ]]></content>
     </entry>
 </feed>

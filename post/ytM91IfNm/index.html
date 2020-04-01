@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>参加万向区块链黑客松总结 [2]  | ToMars</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://github.com/yesky93/favicon.ico?v=1585772123100">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yesky93/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://github.com/yesky93">
+        <img class="avatar" src="https://github.com/yesky93/images/avatar.png?v=1585772123100" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://github.com/yesky93">
+        <h1 class="site-title">ToMars</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">参加万向区块链黑客松总结 [2] </h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2020-03-09</span>
+            
+          </div>
+          <div class="post-content">
+            <h1 id="使用vue-26的感受">使用Vue 2.6的感受</h1>
+<ul>
+<li>Vue写法上使用了UI代码和JS的代码的分离 使得代码阅读起来更像是读html页面代码</li>
+<li><code>scope style</code>这个概念在React没有直接体现
+<ul>
+<li>React里面可以通过CSS Module来达到同样的目的</li>
+<li><a href="https://stackoverflow.com/questions/47090574/how-to-make-react-css-import-component-scoped">参考</a></li>
+</ul>
+</li>
+<li>Vue的模版语法和JSX体验有很大的不同, 有些和angular相似, JSX更体现为用JS语法实现UI</li>
+<li>对于开发者来说，框架之间的使用体验上的不同很大程度上是由他们的编译体系决定的</li>
+<li>目前来看 React更容易使用TypeScript来编写</li>
+</ul>
+<h1 id="使用antdesign-for-vue">使用AntDesign for Vue</h1>
+<ul>
+<li>越想组件做的通用，组件的接口和行为就越复杂</li>
+</ul>
+<h1 id="区块链">区块链</h1>
+<ul>
+<li>使用前端代码获取钱包信息</li>
+<li>前端页面去创建合约</li>
+<li>前端应该是使用的编译后的合约和ABI接口</li>
+</ul>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://github.com/yesky93/post/Yji-mSSID">
+              <h3 class="post-title">
+                下一篇：前端观察
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://github.com/yesky93/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

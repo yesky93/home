@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>通过Github API v4学习GraphQL | ToMars</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://github.com/yesky93/favicon.ico?v=1585772123100">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/yesky93/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://github.com/yesky93">
+        <img class="avatar" src="https://github.com/yesky93/images/avatar.png?v=1585772123100" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://github.com/yesky93">
+        <h1 class="site-title">ToMars</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">通过Github API v4学习GraphQL</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2020-03-25</span>
+            
+          </div>
+          <div class="post-content">
+            <h3 id="使用graphql的原因">使用GraphQL的原因</h3>
+<ul>
+<li>Strongly typed. The schema defines an API's type system and all object relationships.</li>
+<li>Introspective. A client can query the schema for details about the schema</li>
+<li>Hierarchical. The shape of a GraphQL call mirrors the shape of the JSON data it returns.</li>
+<li>The API traverses and returns application data based on the schema definitions, independent of how the data is stored</li>
+</ul>
+<h3 id="graphql的定义">GraphQL的定义</h3>
+<pre><code>An application layer. GraphQL is not a storage model or a database query language. The graph refers to graph structures defined in the schema, where nodes define objects and edges define relationships between objects.
+</code></pre>
+<h3 id="参考">参考</h3>
+<ul>
+<li>https://developer.github.com/v4/</li>
+<li>https://rollout.io/blog/an-introduction-to-graphql-via-the-github-api/</li>
+<li>https://developer.github.com/v4/guides/intro-to-graphql/#discovering-the-graphql-api</li>
+<li>https://developer.github.com/v4/guides/intro-to-graphql/#node</li>
+<li>https://medium.com/@int128/github-graphql-recepies-a3721709145b</li>
+<li>https://blog.ssanj.net/posts/2017-07-30-querying-for-commits-on-master-using-github-graphql-api-v4.html</li>
+<li>https://www.contentstack.com/docs/developers/use-the-graphql-queries-with-apollo-sdks/use-graphql-queries-with-apollo-client-javascript-sdk</li>
+</ul>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://github.com/yesky93/post/QbICAR6nN">
+              <h3 class="post-title">
+                下一篇：从Github API了解GIT
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+
+      <div class="site-footer">
+  <div class="slogan">温故而知新</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://github.com/yesky93/atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
